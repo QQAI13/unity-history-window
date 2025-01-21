@@ -97,7 +97,7 @@ MonoBehaviour:
       sceneName: 
       scenePath: 
       globalObjectId: 
-    - reference: {fileID: 11400000, guid: 06bfe08184cb141dda66836074afa4f0, type: 2}
+    - reference: {fileID: 0}
       sceneName: 
       scenePath: 
       globalObjectId: 
@@ -151,6 +151,10 @@ MonoBehaviour:
       globalObjectId: 
     - reference: {fileID: 9197481963319205126, guid: fcf928e2ae210cb4f899f2b33bc6451f,
         type: 3}
+      sceneName: 
+      scenePath: 
+      globalObjectId: 
+    - reference: {fileID: 11400000, guid: 06bfe08184cb141dda66836074afa4f0, type: 2}
       sceneName: 
       scenePath: 
       globalObjectId: 
