@@ -9,7 +9,6 @@ namespace Gemserk
         // List to maintain folder names
         public static List<string> ExistedTabs = new List<string>();
 
-        // Path of the folder to traverse
         private static string targetFolder = "Assets/Gemserk/";
 
         [MenuItem("Window/Gemserk/Manage Existed Windows")]
@@ -20,7 +19,6 @@ namespace Gemserk
             window.minSize = new Vector2(400, 300);
             window.Show();
 
-            // Auto-populate the tabs from the target folder
             RefreshExistedTabs();
         }
 
@@ -55,7 +53,7 @@ namespace Gemserk
                 {
                     if (EditorUtility.DisplayDialog("Delete Window", $"Are you sure you want to delete '{tab}'?", "Yes", "No"))
                     {
-                        tabsToRemove.Add(tab); // Add the tab to the removal list
+                        tabsToRemove.Add(tab); 
                     }
                 }
 
@@ -77,17 +75,14 @@ namespace Gemserk
         {
             ExistedTabs.Clear();
 
-            // Get all asset GUIDs in the target folder
             string[] guids = AssetDatabase.FindAssets("", new[] { targetFolder });
 
             foreach (string guid in guids)
             {
                 string assetPath = AssetDatabase.GUIDToAssetPath(guid);
 
-                // Extract the asset name without extension
                 string assetName = System.IO.Path.GetFileNameWithoutExtension(assetPath);
 
-                // Add the asset name to the list
                 if (!ExistedTabs.Contains(assetName))
                 {
                     ExistedTabs.Add(assetName);
@@ -97,7 +92,6 @@ namespace Gemserk
             Debug.Log($"Updated ExistedTabs with {ExistedTabs.Count} assets from '{targetFolder}'");
         }
 
-        // Opens a new window for the specified tab
         private static void OpenWindow(string tabName)
         {
             var window = EditorWindow.GetWindow<NewAssetsWindow>();
@@ -113,7 +107,6 @@ namespace Gemserk
         {
             ExistedTabs.Remove(tabName);
 
-            // Construct the path to the corresponding asset file
             string assetFilePath = $"{targetFolder}{tabName}.asset";
 
             if (AssetDatabase.DeleteAsset(assetFilePath))
@@ -125,7 +118,6 @@ namespace Gemserk
                 Debug.LogWarning($"Failed to delete asset file for tab '{tabName}'. File may not exist: {assetFilePath}");
             }
 
-            // Refresh the asset database and the tabs list
             AssetDatabase.Refresh();
         }
     }

@@ -38,17 +38,22 @@ namespace Gemserk
 
             if (GUILayout.Button("Create"))
             {
+                if (ManageExistedWindows.ExistedTabs.Contains(windowName))
+                {
+                    Debug.LogWarning($"Tab '{windowName}' already exists.");
+                    return;
+                }
+                
+                ManageExistedWindows.ExistedTabs.Add(windowName);
+
                 var window = CreateInstance<NewAssetsWindow>();
+                
                 var titleContent = EditorGUIUtility.IconContent(UnityBuiltInIcons.pickObjectIconName);
 
-                titleContent.text = windowName;
-                titleContent.tooltip = windowName + "assets window";
-                window.titleContent = titleContent;
+                window.titleContent.text = windowName;
+                window.titleContent.tooltip = windowName + "assets window";
                 
                 window.Show();
-
-                window.assetName = windowName;
-                ManageExistedWindows.ExistedTabs.Add(windowName);
 
                 Close();
             }
@@ -61,7 +66,7 @@ namespace Gemserk
         private NewAssets _newAssets;
 
         public string assetName = "NewAssets";
-        public string assetFilePath = "Assets/Gemserk/";  // NewAssets.asset
+        public string assetFilePath = "Assets/Gemserk/"; 
 
         private StyleSheet styleSheet;
         private VisualTreeAsset AssetsElementTreeAsset;
