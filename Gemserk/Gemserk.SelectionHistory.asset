@@ -54,59 +54,7 @@ MonoBehaviour:
       sceneName: 
       scenePath: 
       globalObjectId: 
-    - reference: {fileID: 0}
-      sceneName: 
-      scenePath: 
-      globalObjectId: 
     - reference: {fileID: 102900000, guid: 4c19268c54e3e4596b624c9a632d6935, type: 3}
-      sceneName: 
-      scenePath: 
-      globalObjectId: 
-    - reference: {fileID: 0}
-      sceneName: 
-      scenePath: 
-      globalObjectId: 
-    - reference: {fileID: 0}
-      sceneName: 
-      scenePath: 
-      globalObjectId: 
-    - reference: {fileID: 0}
-      sceneName: 
-      scenePath: 
-      globalObjectId: 
-    - reference: {fileID: 0}
-      sceneName: 
-      scenePath: 
-      globalObjectId: 
-    - reference: {fileID: 0}
-      sceneName: 
-      scenePath: 
-      globalObjectId: 
-    - reference: {fileID: 0}
-      sceneName: 
-      scenePath: 
-      globalObjectId: 
-    - reference: {fileID: 0}
-      sceneName: 
-      scenePath: 
-      globalObjectId: 
-    - reference: {fileID: 0}
-      sceneName: 
-      scenePath: 
-      globalObjectId: 
-    - reference: {fileID: 0}
-      sceneName: 
-      scenePath: 
-      globalObjectId: 
-    - reference: {fileID: 0}
-      sceneName: 
-      scenePath: 
-      globalObjectId: 
-    - reference: {fileID: 0}
-      sceneName: 
-      scenePath: 
-      globalObjectId: 
-    - reference: {fileID: 0}
       sceneName: 
       scenePath: 
       globalObjectId: 
@@ -115,22 +63,6 @@ MonoBehaviour:
       scenePath: 
       globalObjectId: 
     - reference: {fileID: 0}
-      sceneName: 
-      scenePath: 
-      globalObjectId: 
-    - reference: {fileID: 0}
-      sceneName: 
-      scenePath: 
-      globalObjectId: 
-    - reference: {fileID: 0}
-      sceneName: 
-      scenePath: 
-      globalObjectId: 
-    - reference: {fileID: 11400000, guid: be497d69d60bb48d18e9da6675c70ba9, type: 2}
-      sceneName: 
-      scenePath: 
-      globalObjectId: 
-    - reference: {fileID: 11400000, guid: 03bffcd9ab7e04ada989832b5cf8dab7, type: 2}
-      sceneName: 
-      scenePath: 
-      globalObjectId: 
+      sceneName: GlobalIdTestScene
+      scenePath: Assets/Scenes/GlobalIdTest/GlobalIdTestScene.unity
+      globalObjectId: GlobalObjectId_V1-2-8d557def68244fd46a45dd08bd34aae2-822805708-0

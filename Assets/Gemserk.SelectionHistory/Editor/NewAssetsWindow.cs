@@ -48,6 +48,8 @@ namespace Gemserk
                 window.Show();
 
                 window.assetName = windowName;
+                ManageExistedWindows.ExistedTabs.Add(windowName);
+
                 Close();
             }
 
@@ -67,8 +69,6 @@ namespace Gemserk
         private VisualElement newAssetsParent;
         private string searchText;
 
-        [MenuItem("Assets/NewAsset Item")]
-        [Shortcut("Gemserk/NewAsset Item", null, KeyCode.F, ShortcutModifiers.Shift | ShortcutModifiers.Alt)]
         public static void NewAsset()
         {
             var selectedObjects = Selection.objects;
@@ -85,6 +85,8 @@ namespace Gemserk
                 }
             }
         }
+
+
 
         private void GetDefaultElements()
         {
