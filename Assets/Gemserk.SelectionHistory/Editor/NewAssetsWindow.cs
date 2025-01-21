@@ -7,18 +7,65 @@ using UnityEngine.UIElements;
 
 namespace Gemserk
 {
-    public class FavoriteAssetsWindow : EditorWindow
+    public class NameInputDialog : EditorWindow
     {
-        [MenuItem("Window/Gemserk/Favorites")]
-        public static void OpenWindow()
+        private string windowName = "";
+        private System.Action<string> onNameEntered;
+
+        public static void ShowDialog(System.Action<string> callback)
         {
-            string windowName = "Favorites";
-            var window = GetWindow<FavoriteAssetsWindow>();
-            var titleContent = EditorGUIUtility.IconContent(UnityBuiltInIcons.favoriteWindowIconName);
-            titleContent.text = windowName;
-            titleContent.tooltip = "Favorite assets window";
-            window.titleContent = titleContent;
+            var dialog = GetWindow<NameInputDialog>("Name Your Window");
+            dialog.minSize = new Vector2(300, 100);
+            dialog.maxSize = new Vector2(300, 100);
+            dialog.onNameEntered = callback;
         }
+
+        private void OnGUI()
+        {
+            GUILayout.Label("Enter a name for your new window:", EditorStyles.label);
+
+            windowName = EditorGUILayout.TextField("Window Name:", windowName);
+
+            GUILayout.Space(10);
+
+            GUILayout.BeginHorizontal();
+
+            if (GUILayout.Button("Cancel"))
+            {
+                onNameEntered?.Invoke(""); // Callback with an empty string
+                Close();
+            }
+
+            if (GUILayout.Button("Create"))
+            {
+                onNameEntered?.Invoke(windowName); // Callback with the entered name
+                Close();
+            }
+
+            GUILayout.EndHorizontal();
+        }
+    }
+    public class NewAssetsWindow : EditorWindow
+    {
+        [MenuItem("Window/Gemserk/NewAssetsWindow")]
+
+        public static void NewWindow()
+        {
+            NameInputDialog.ShowDialog(inputName =>
+            {
+                if (!string.IsNullOrWhiteSpace(inputName))
+                {
+                    var window = GetWindow<NewAssetsWindow>();
+                    window.titleContent = new GUIContent(inputName);
+                    Debug.Log("Window created with name: " + inputName);
+                }
+                else
+                {
+                    Debug.Log("Window creation canceled.");
+                }
+            });
+        }
+
 
         [MenuItem("Assets/Favorite Item")]
         [Shortcut("Gemserk/Favorite Item", null, KeyCode.F, ShortcutModifiers.Shift | ShortcutModifiers.Alt)]
