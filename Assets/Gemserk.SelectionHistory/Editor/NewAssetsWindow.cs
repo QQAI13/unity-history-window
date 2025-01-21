@@ -44,17 +44,10 @@ namespace Gemserk
                     return;
                 }
                 
-                ManageExistedWindows.ExistedTabs.Add(windowName);
+                var window = EditorWindow.CreateInstance<NewAssetsWindow>();
 
-                var window = CreateInstance<NewAssetsWindow>();
+                window.Initianlize(windowName, "Assets/Gemserk/" + windowName + ".asset");
                 
-                var titleContent = EditorGUIUtility.IconContent(UnityBuiltInIcons.pickObjectIconName);
-
-                window.titleContent.text = windowName;
-                window.titleContent.tooltip = windowName + "assets window";
-                
-                window.Show();
-
                 Close();
             }
 
@@ -63,7 +56,7 @@ namespace Gemserk
     }
     public class NewAssetsWindow : EditorWindow
     {
-        private NewAssets _newAssets;
+        public NewAssets _newAssets;
 
         public string assetName = "NewAssets";
         public string assetFilePath = "Assets/Gemserk/"; 
@@ -73,6 +66,39 @@ namespace Gemserk
         private ToolbarSearchField searchToolbar;
         private VisualElement newAssetsParent;
         private string searchText;
+
+        public void Initianlize(string windowName, string filePath, bool open = false)
+        {
+            titleContent = new GUIContent(name, EditorGUIUtility.IconContent(UnityBuiltInIcons.pickObjectIconName).image);
+
+            assetName = windowName;
+            assetFilePath = filePath;
+
+
+            if(open){
+
+                _newAssets = AssetDatabase.LoadAssetAtPath<NewAssets>(assetFilePath + assetName + ".asset");
+
+                foreach (var o in _newAssets.favoritesList)
+                {
+                    AssetsElements(new Object[] { o.reference });
+                }
+
+                ReloadRoot();
+
+            }else{
+
+                ManageExistedWindows.ExistedTabs.Add(windowName);
+
+                 _newAssets = NewAssets.CreateAndSave(assetFilePath, windowName);
+            }
+
+            titleContent.text = windowName;
+            titleContent.tooltip = windowName + "assets window";
+                
+            Show();
+            ReloadRoot();
+        }
 
         public static void NewAsset()
         {
@@ -118,11 +144,10 @@ namespace Gemserk
         private void AssetsElements(Object[] references)
         {
             
-            var _newAssets = AssetDatabase.LoadAssetAtPath<NewAssets>(assetFilePath + assetName + ".asset");
+            _newAssets = AssetDatabase.LoadAssetAtPath<NewAssets>(assetFilePath + assetName + ".asset");
 
             if (_newAssets == null)
             {
-
                 _newAssets = NewAssets.CreateAndSave(assetFilePath, assetName);
 
             }else{
@@ -150,18 +175,30 @@ namespace Gemserk
             }
         }
 
+        public void Reload()
+        {
+            GetDefaultElements();
+            ReloadRoot();
+        }
+
 
         private void OnEnable()
         {
             GetDefaultElements();
 
-            _newAssets = AssetDatabase.LoadAssetAtPath<NewAssets>(assetFilePath);
+            _newAssets = AssetDatabase.LoadAssetAtPath<NewAssets>(assetFilePath + assetName + ".asset");
+            
+
             if (_newAssets == null)
             {
                 _newAssets = NewAssets.CreateAndSave(assetFilePath, assetName);
+                Debug.Log("NewAssetsWindow created new asset");
+
             }else{
                 Debug.Log("NewAssetsWindow loaded existing asset");
             }
+
+            _newAssets.OnFavoritesUpdated += OnFavoritesUpdated;
 
             var root = rootVisualElement;
             root.styleSheets.Add(styleSheet);
@@ -240,11 +277,6 @@ namespace Gemserk
                 }
             }
 
-            _newAssets.OnFavoritesUpdated += OnFavoritesUpdated;
-
-            _newAssets = AssetDatabase.LoadAssetAtPath<NewAssets>(assetFilePath + assetName + ".asset");
-
-
             // Iterate through all assets
             for (var i = 0; i < _newAssets.favoritesList.Count; i++)
             {
@@ -278,6 +310,7 @@ namespace Gemserk
                 var newAssetRoot = elementTree.Q<VisualElement>("Root");
 
                 var dragArea = elementTree.Q<VisualElement>("DragArea");
+                
                 if (dragArea != null)
                 {
                     dragArea.AddManipulator(new NewAssetsElementDragManipulator(assetReference));
@@ -326,6 +359,10 @@ namespace Gemserk
 
                 newAssetsParent.Add(newAssetRoot);
             }
+
+            EditorUtility.SetDirty(_newAssets);
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
 
             // Add a flexible space at the bottom to improve UI spacing
             var receiveDragArea = new VisualElement();
