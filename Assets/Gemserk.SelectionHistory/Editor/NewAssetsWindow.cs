@@ -46,8 +46,7 @@ namespace Gemserk
                 window.titleContent = titleContent;
                 
                 window.Show();
-                Debug.Log("Window created with name: " + windowName);
-                // window.assetFilePath += windowName + ".asset";
+
                 window.assetName = windowName;
                 Close();
             }
@@ -106,8 +105,6 @@ namespace Gemserk
 
         private static bool CanBeNewAsset(Object reference)
         {
-            Debug.Log("CanBeNewAsset:" + reference.name);
-            Debug.Log("AssetDB:" + AssetDatabase.GetAssetPath(reference));
             return !string.IsNullOrEmpty(AssetDatabase.GetAssetPath(reference));
         }
 
@@ -115,12 +112,10 @@ namespace Gemserk
         {
             
             var _newAssets = AssetDatabase.LoadAssetAtPath<NewAssets>(assetFilePath + assetName + ".asset");
-            Debug.Log("AssetsElements:" +  assetFilePath + assetName + ".asset");
-            Debug.Log("AssetsElements:" +  _newAssets);
 
             if (_newAssets == null)
             {
-                Debug.Log("NewAssetsWindow creating new asset");
+
                 _newAssets = NewAssets.CreateAndSave(assetFilePath, assetName);
 
             }else{
@@ -134,14 +129,12 @@ namespace Gemserk
 
                 if (CanBeNewAsset(reference))
                 {
-                    Debug.Log("Adding new asset: " + reference.name);
 
                     _newAssets.AddFavorite(new NewAssets.Assets
                     {
                         reference = reference
                     });
                     
-                    Debug.Log(_newAssets.favoritesList.Count);
                     ReloadRoot();
 
                 }else{
@@ -158,13 +151,10 @@ namespace Gemserk
             _newAssets = AssetDatabase.LoadAssetAtPath<NewAssets>(assetFilePath);
             if (_newAssets == null)
             {
-                Debug.Log("NewAssetsWindow creating new asset");
                 _newAssets = NewAssets.CreateAndSave(assetFilePath, assetName);
             }else{
                 Debug.Log("NewAssetsWindow loaded existing asset");
             }
-
-            Debug.Log("NewAssetsWindow enabled");
 
             var root = rootVisualElement;
             root.styleSheets.Add(styleSheet);
@@ -221,7 +211,6 @@ namespace Gemserk
         {
             var root = rootVisualElement;
 
-            Debug.Log("Reloading root");
 
             if (newAssetsParent == null)
             {
@@ -244,15 +233,15 @@ namespace Gemserk
                 }
             }
 
-            //  _newAssets = AssetDatabase.LoadAssetAtPath<NewAssets>(assetFilePath);
-            Debug.Log("New asset:" + _newAssets.favoritesList);
+            _newAssets.OnFavoritesUpdated += OnFavoritesUpdated;
+
+            _newAssets = AssetDatabase.LoadAssetAtPath<NewAssets>(assetFilePath + assetName + ".asset");
+
 
             // Iterate through all assets
             for (var i = 0; i < _newAssets.favoritesList.Count; i++)
             {
                 var assetReference = _newAssets.favoritesList[i].reference;
-
-                Debug.Log("NA:"+  i + assetReference.name);
 
                 if (assetReference == null)
                     continue;
@@ -284,7 +273,6 @@ namespace Gemserk
                 var dragArea = elementTree.Q<VisualElement>("DragArea");
                 if (dragArea != null)
                 {
-                    Debug.Log("Adding manipulator(NEW): " + assetReference);
                     dragArea.AddManipulator(new NewAssetsElementDragManipulator(assetReference));
                 }
 

@@ -11,7 +11,6 @@ namespace Gemserk
     {
         public static string GetSearchFilter(Type type)
         {
-            Debug.Log("GetSearchFilter:" + type.Name);
             return $"t:{type.Name}";
         }
         

@@ -21,7 +21,7 @@ namespace Gemserk
         public FavoriteElementDragManipulator(Object assetReference)
         {
             this.assetReference = assetReference;
-            Debug.Log("FavoriteElementDragManipulator ref:" + assetReference.name);
+
             mouseDownHandler = OnMouseDown;
             mouseMoveHandler = OnMouseMove;
             mouseUpHandler = OnMouseUp;
