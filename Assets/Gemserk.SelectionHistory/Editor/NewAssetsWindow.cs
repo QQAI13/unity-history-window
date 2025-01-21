@@ -55,8 +55,9 @@ namespace Gemserk
             {
                 if (!string.IsNullOrWhiteSpace(inputName))
                 {
-                    var window = GetWindow<NewAssetsWindow>();
+                    var window = CreateInstance<NewAssetsWindow>();
                     window.titleContent = new GUIContent(inputName);
+                    window.Show();
                     Debug.Log("Window created with name: " + inputName);
                 }
                 else
