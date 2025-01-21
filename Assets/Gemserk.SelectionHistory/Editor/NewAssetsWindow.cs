@@ -141,7 +141,9 @@ namespace Gemserk
                         reference = reference
                     });
                     
-                    Debug.Log(_newAssets.favoritesList);
+                    Debug.Log(_newAssets.favoritesList.Count);
+                    ReloadRoot();
+
                 }else{
                     Debug.Log("Can't add new asset: " + reference.name);
                 }
@@ -219,6 +221,8 @@ namespace Gemserk
         {
             var root = rootVisualElement;
 
+            Debug.Log("Reloading root");
+
             if (newAssetsParent == null)
             {
                 newAssetsParent = new ScrollView(ScrollViewMode.Vertical);
@@ -240,10 +244,15 @@ namespace Gemserk
                 }
             }
 
+            //  _newAssets = AssetDatabase.LoadAssetAtPath<NewAssets>(assetFilePath);
+            Debug.Log("New asset:" + _newAssets.favoritesList);
+
             // Iterate through all assets
             for (var i = 0; i < _newAssets.favoritesList.Count; i++)
             {
                 var assetReference = _newAssets.favoritesList[i].reference;
+
+                Debug.Log("NA:"+  i + assetReference.name);
 
                 if (assetReference == null)
                     continue;
@@ -312,10 +321,12 @@ namespace Gemserk
                     });
                 }
 
-                var label = elementTree.Q<Label>("NewAsset");
+                var label = elementTree.Q<Label>("Favorite");
                 if (label != null)
                 {
                     label.text = assetReference.name;
+                }else{
+                    label.text = testName;
                 }
 
                 newAssetsParent.Add(newAssetRoot);

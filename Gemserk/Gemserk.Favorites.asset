@@ -15,7 +15,8 @@ MonoBehaviour:
   favoritesList:
   - reference: {fileID: 7796676050958171788, guid: 2a04dd101406e40bd80d6932bd31e5db,
       type: 3}
-  - reference: {fileID: 4303854267155591686, guid: b09dd301f67a642e3ac4d233ef057f47,
-      type: 3}
-  - reference: {fileID: 11500000, guid: 0b9c7e0ea1d1f9540bf87b238c0b98b3, type: 3}
   - reference: {fileID: 11500000, guid: 36063a73dc5d0f744b0b72ba4bd6afb1, type: 3}
+  - reference: {fileID: 1551831244053812, guid: 3ebe9e922267a534d93c812d209667c8,
+      type: 3}
+  - reference: {fileID: 1551831244053812, guid: 19c20701dca26b8448f2bb0c1e5788a0,
+      type: 3}

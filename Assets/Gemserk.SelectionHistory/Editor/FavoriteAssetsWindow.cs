@@ -166,10 +166,14 @@ namespace Gemserk
                 }
             }
 
+            
+
             for (var i = 0; i < _favorites.favoritesList.Count; i++)
             {
                 var assetReference = _favorites.favoritesList[i].reference;
 
+                Debug.Log("FAV" + i + assetReference);
+                
                 if (assetReference == null)
                     continue;
 
