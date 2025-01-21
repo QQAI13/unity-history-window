@@ -2,7 +2,7 @@
 %TAG !u! tag:unity3d.com,2011:
 --- !u!114 &1
 MonoBehaviour:
-  m_ObjectHideFlags: 61
+  m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   favoritesList:
-  - reference: {fileID: 11500000, guid: 0b9c7e0ea1d1f9540bf87b238c0b98b3, type: 3}
+  - reference: {fileID: 7796676050958171788, guid: 2a04dd101406e40bd80d6932bd31e5db,
+      type: 3}
   - reference: {fileID: 4303854267155591686, guid: b09dd301f67a642e3ac4d233ef057f47,
       type: 3}
-  - reference: {fileID: 5897886265953266890, guid: e75970e2f5a65ec4593a51648266e089,
-      type: 3}
-  - reference: {fileID: 11500000, guid: 928b56d4ce0288849903e27c439438a4, type: 3}
+  - reference: {fileID: 11500000, guid: 0b9c7e0ea1d1f9540bf87b238c0b98b3, type: 3}
+  - reference: {fileID: 11500000, guid: 36063a73dc5d0f744b0b72ba4bd6afb1, type: 3}

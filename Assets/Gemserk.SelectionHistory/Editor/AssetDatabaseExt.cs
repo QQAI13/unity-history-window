@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
+using UnityEngine;
 using Object = UnityEngine.Object;
 
 namespace Gemserk
@@ -10,6 +11,7 @@ namespace Gemserk
     {
         public static string GetSearchFilter(Type type)
         {
+            Debug.Log("GetSearchFilter:" + type.Name);
             return $"t:{type.Name}";
         }
         

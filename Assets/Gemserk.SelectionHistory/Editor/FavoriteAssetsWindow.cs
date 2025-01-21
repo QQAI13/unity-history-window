@@ -39,6 +39,7 @@ namespace Gemserk
         private static void FavoriteElements(Object[] references)
         {
             var favorites = FavoritesAsset.instance;
+            Debug.Log("FAV FavoriteElements:" + favorites);
 
             foreach (var reference in references)
             {
@@ -98,6 +99,8 @@ namespace Gemserk
             
             _favorites = FavoritesAsset.instance;
             _favorites.OnFavoritesUpdated += OnFavoritesUpdated;
+
+            Debug.Log("FAV OnEnable");
             
             var root = rootVisualElement;
             root.styleSheets.Add(styleSheet);
@@ -200,6 +203,7 @@ namespace Gemserk
 
                 if (dragArea != null)
                 {
+                    Debug.Log("Adding manipulator(FAV):" + assetReference);
                     dragArea.AddManipulator(new FavoriteElementDragManipulator(assetReference));
                 }
                 

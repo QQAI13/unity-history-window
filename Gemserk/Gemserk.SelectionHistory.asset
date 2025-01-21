@@ -49,12 +49,48 @@ MonoBehaviour:
     - reference: {fileID: 0}
       sceneName: GlobalIdTestScene
       scenePath: Assets/Scenes/GlobalIdTest/GlobalIdTestScene.unity
-      globalObjectId: GlobalObjectId_V1-2-8d557def68244fd46a45dd08bd34aae2-233291416-0
-    - reference: {fileID: 0}
-      sceneName: GlobalIdTestScene
-      scenePath: Assets/Scenes/GlobalIdTest/GlobalIdTestScene.unity
       globalObjectId: GlobalObjectId_V1-2-8d557def68244fd46a45dd08bd34aae2-1471675325-0
-    - reference: {fileID: 102900000, guid: 4a1a59f0b5083c04590c927442d6b9ff, type: 3}
+    - reference: {fileID: 11500000, guid: 928b56d4ce0288849903e27c439438a4, type: 3}
+      sceneName: 
+      scenePath: 
+      globalObjectId: 
+    - reference: {fileID: 11500000, guid: 7383711481494ce299d7645284d0980f, type: 3}
+      sceneName: 
+      scenePath: 
+      globalObjectId: 
+    - reference: {fileID: 0}
+      sceneName: 
+      scenePath: 
+      globalObjectId: 
+    - reference: {fileID: 102900000, guid: 4c19268c54e3e4596b624c9a632d6935, type: 3}
+      sceneName: 
+      scenePath: 
+      globalObjectId: 
+    - reference: {fileID: 0}
+      sceneName: 
+      scenePath: 
+      globalObjectId: 
+    - reference: {fileID: 0}
+      sceneName: 
+      scenePath: 
+      globalObjectId: 
+    - reference: {fileID: 0}
+      sceneName: 
+      scenePath: 
+      globalObjectId: 
+    - reference: {fileID: 0}
+      sceneName: 
+      scenePath: 
+      globalObjectId: 
+    - reference: {fileID: 0}
+      sceneName: 
+      scenePath: 
+      globalObjectId: 
+    - reference: {fileID: 0}
+      sceneName: 
+      scenePath: 
+      globalObjectId: 
+    - reference: {fileID: 11400000, guid: 943d67b6e45ba4e0badb769b46f40ca9, type: 2}
       sceneName: 
       scenePath: 
       globalObjectId: 

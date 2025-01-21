@@ -1,3 +1,4 @@
+
 using System.Linq;
 using UnityEditor;
 using UnityEditor.ShortcutManagement;
@@ -12,12 +13,12 @@ namespace Gemserk
         private string windowName = "";
         private System.Action<string> onNameEntered;
 
-        public static void ShowDialog(System.Action<string> callback)
+        [MenuItem("Window/Gemserk/New Assets Window")]
+        public static void ShowDialog()
         {
             var dialog = GetWindow<NameInputDialog>("Name Your Window");
             dialog.minSize = new Vector2(300, 100);
             dialog.maxSize = new Vector2(300, 100);
-            dialog.onNameEntered = callback;
         }
 
         private void OnGUI()
@@ -32,13 +33,22 @@ namespace Gemserk
 
             if (GUILayout.Button("Cancel"))
             {
-                onNameEntered?.Invoke(""); // Callback with an empty string
                 Close();
             }
 
             if (GUILayout.Button("Create"))
             {
-                onNameEntered?.Invoke(windowName); // Callback with the entered name
+                var window = CreateInstance<NewAssetsWindow>();
+                var titleContent = EditorGUIUtility.IconContent(UnityBuiltInIcons.pickObjectIconName);
+
+                titleContent.text = windowName;
+                titleContent.tooltip = windowName + "assets window";
+                window.titleContent = titleContent;
+                
+                window.Show();
+                Debug.Log("Window created with name: " + windowName);
+                // window.assetFilePath += windowName + ".asset";
+                window.assetName = windowName;
                 Close();
             }
 
@@ -47,73 +57,36 @@ namespace Gemserk
     }
     public class NewAssetsWindow : EditorWindow
     {
-        [MenuItem("Window/Gemserk/NewAssetsWindow")]
+        private NewAssets _newAssets;
 
-        public static void NewWindow()
-        {
-            NameInputDialog.ShowDialog(inputName =>
-            {
-                if (!string.IsNullOrWhiteSpace(inputName))
-                {
-                    var window = CreateInstance<NewAssetsWindow>();
-                    window.titleContent = new GUIContent(inputName);
-                    window.Show();
-                    Debug.Log("Window created with name: " + inputName);
-                }
-                else
-                {
-                    Debug.Log("Window creation canceled.");
-                }
-            });
-        }
-
-
-        [MenuItem("Assets/Favorite Item")]
-        [Shortcut("Gemserk/Favorite Item", null, KeyCode.F, ShortcutModifiers.Shift | ShortcutModifiers.Alt)]
-        public static void Favorite()
-        { 
-            FavoriteElements(Selection.objects);
-        }
-
-        private static bool CanBeFavorite(Object reference)
-        {
-            if (!string.IsNullOrEmpty(AssetDatabase.GetAssetPath(reference)))
-            {
-                return true;
-            }
-            return false;
-        }
-
-        private static void FavoriteElements(Object[] references)
-        {
-            var favorites = FavoritesAsset.instance;
-
-            foreach (var reference in references)
-            {
-                if (favorites.IsFavorite(reference))
-                    continue;
-            
-                if (CanBeFavorite(reference))
-                {
-                    favorites.AddFavorite(new FavoritesAsset.Favorite
-                    {
-                        reference = reference
-                    });   
-                }
-            }
-        }
-
-        private FavoritesAsset _favorites;
+        public string assetName = "NewAssets";
+        public string assetFilePath = "Assets/Gemserk/";  // NewAssets.asset
 
         private StyleSheet styleSheet;
-
-        private VisualTreeAsset favoriteElementTreeAsset;
-
+        private VisualTreeAsset AssetsElementTreeAsset;
         private ToolbarSearchField searchToolbar;
-        private VisualElement favoritesParent;
-        
+        private VisualElement newAssetsParent;
         private string searchText;
-        
+
+        [MenuItem("Assets/NewAsset Item")]
+        [Shortcut("Gemserk/NewAsset Item", null, KeyCode.F, ShortcutModifiers.Shift | ShortcutModifiers.Alt)]
+        public static void NewAsset()
+        {
+            var selectedObjects = Selection.objects;
+            if (selectedObjects != null && selectedObjects.Length > 0)
+            {
+                foreach (var obj in selectedObjects)
+                {
+                    if (CanBeNewAsset(obj))
+                    {
+                        Debug.Log($"Added new asset: {obj.name}");
+                    }else{
+                        Debug.Log($"Can't add new asset: {obj.name}");
+                    }
+                }
+            }
+        }
+
         private void GetDefaultElements()
         {
             if (styleSheet == null)
@@ -122,31 +95,75 @@ namespace Gemserk
                     .OfType<StyleSheet>().FirstOrDefault();
             }
             
-            if (favoriteElementTreeAsset == null)
+            if (AssetsElementTreeAsset == null)
             {
-                favoriteElementTreeAsset = AssetDatabaseExt.FindAssets(typeof(VisualTreeAsset), "FavoriteElement")
+                var treeAsset = AssetsElementTreeAsset = AssetDatabaseExt.FindAssets(typeof(VisualTreeAsset), "FavoriteElement")
                     .OfType<VisualTreeAsset>().FirstOrDefault();
+            }else{
+                Debug.Log("AssetsElementTreeAsset already loaded");
             }
-        }
-        
-        private void OnDisable()
-        {
-            if (_favorites != null)
-            {
-                _favorites.OnFavoritesUpdated -= OnFavoritesUpdated;
-            }
-            
-            styleSheet = null;
-            favoriteElementTreeAsset = null;
         }
 
-        public void OnEnable()
+        private static bool CanBeNewAsset(Object reference)
+        {
+            Debug.Log("CanBeNewAsset:" + reference.name);
+            Debug.Log("AssetDB:" + AssetDatabase.GetAssetPath(reference));
+            return !string.IsNullOrEmpty(AssetDatabase.GetAssetPath(reference));
+        }
+
+        private void AssetsElements(Object[] references)
+        {
+            
+            var _newAssets = AssetDatabase.LoadAssetAtPath<NewAssets>(assetFilePath + assetName + ".asset");
+            Debug.Log("AssetsElements:" +  assetFilePath + assetName + ".asset");
+            Debug.Log("AssetsElements:" +  _newAssets);
+
+            if (_newAssets == null)
+            {
+                Debug.Log("NewAssetsWindow creating new asset");
+                _newAssets = NewAssets.CreateAndSave(assetFilePath, assetName);
+
+            }else{
+                Debug.Log("NewAssetsWindow loaded existing asset");
+            }
+
+            foreach (var reference in references)
+            {
+                if (_newAssets.IsFavorite(reference))
+                    continue;
+
+                if (CanBeNewAsset(reference))
+                {
+                    Debug.Log("Adding new asset: " + reference.name);
+
+                    _newAssets.AddFavorite(new NewAssets.Assets
+                    {
+                        reference = reference
+                    });
+                    
+                    Debug.Log(_newAssets.favoritesList);
+                }else{
+                    Debug.Log("Can't add new asset: " + reference.name);
+                }
+            }
+        }
+
+
+        private void OnEnable()
         {
             GetDefaultElements();
-            
-            _favorites = FavoritesAsset.instance;
-            _favorites.OnFavoritesUpdated += OnFavoritesUpdated;
-            
+
+            _newAssets = AssetDatabase.LoadAssetAtPath<NewAssets>(assetFilePath);
+            if (_newAssets == null)
+            {
+                Debug.Log("NewAssetsWindow creating new asset");
+                _newAssets = NewAssets.CreateAndSave(assetFilePath, assetName);
+            }else{
+                Debug.Log("NewAssetsWindow loaded existing asset");
+            }
+
+            Debug.Log("NewAssetsWindow enabled");
+
             var root = rootVisualElement;
             root.styleSheets.Add(styleSheet);
 
@@ -155,7 +172,7 @@ namespace Gemserk
             root.RegisterCallback<DragPerformEvent>(evt =>
             {
                 DragAndDrop.AcceptDrag();
-                FavoriteElements(DragAndDrop.objectReferences);
+                AssetsElements(DragAndDrop.objectReferences);
             });
             
             root.RegisterCallback<DragUpdatedEvent>(evt =>
@@ -163,15 +180,27 @@ namespace Gemserk
                 DragAndDrop.visualMode = DragAndDropVisualMode.Move;
             });
             
+
             ReloadRoot();
         }
 
-        private void OnFavoritesUpdated(FavoritesAsset favorites)
+        private void OnFavoritesUpdated(NewAssets newAssets)
         {
-            // var root = rootVisualElement;
-            // root.Clear();
             ReloadRoot();
         }
+
+
+        private void OnDisable()
+        {
+            if (_newAssets != null)
+            {
+                _newAssets.OnFavoritesUpdated -= OnFavoritesUpdated;
+            }
+            
+            styleSheet = null;
+            AssetsElementTreeAsset = null;
+        }
+
 
         private VisualElement CreateSearchToolbar()
         {
@@ -185,118 +214,118 @@ namespace Gemserk
 
             return searchToolbar;
         }
-        
+
         private void ReloadRoot()
         {
             var root = rootVisualElement;
 
-            // var visualTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/Editor/FavoriteElement.uxml");
-            if (favoritesParent == null)
+            if (newAssetsParent == null)
             {
-                favoritesParent = new ScrollView(ScrollViewMode.Vertical);
-                root.Add(favoritesParent);
+                newAssetsParent = new ScrollView(ScrollViewMode.Vertical);
+                root.Add(newAssetsParent);
             }
             else
             {
-                favoritesParent.Clear();
+                newAssetsParent.Clear();
             }
-            
+
+            // Parse search text into multiple search terms
             string[] searchTexts = null;
             if (!string.IsNullOrEmpty(searchText))
             {
-                searchText = searchText.TrimStart().TrimEnd();
+                searchText = searchText.Trim();
                 if (!string.IsNullOrEmpty(searchText))
                 {
                     searchTexts = searchText.Split(' ');
                 }
             }
 
-            for (var i = 0; i < _favorites.favoritesList.Count; i++)
+            // Iterate through all assets
+            for (var i = 0; i < _newAssets.favoritesList.Count; i++)
             {
-                var assetReference = _favorites.favoritesList[i].reference;
+                var assetReference = _newAssets.favoritesList[i].reference;
 
                 if (assetReference == null)
                     continue;
 
                 var testName = assetReference.name.ToLower();
-                    
+
+                // Check if the asset matches all search terms
                 if (searchTexts != null && searchTexts.Length > 0)
                 {
                     var match = true;
-                        
+
                     foreach (var text in searchTexts)
                     {
                         if (!testName.Contains(text.ToLower()))
                         {
                             match = false;
+                            break;
                         }
                     }
 
                     if (!match)
-                    {
                         continue;
-                    }
                 }
-                
-                var elementTree = favoriteElementTreeAsset.CloneTree();
-                var favoriteRoot = elementTree.Q<VisualElement>("Root");
-                
-                var dragArea = elementTree.Q<VisualElement>("DragArea");
-                
-                var isSceneAsset = assetReference is SceneAsset;
-                var isAsset = !isSceneAsset;
 
+                // Clone the UI template and populate its data
+                var elementTree = AssetsElementTreeAsset.CloneTree();
+                var newAssetRoot = elementTree.Q<VisualElement>("Root");
+
+                var dragArea = elementTree.Q<VisualElement>("DragArea");
                 if (dragArea != null)
                 {
-                    dragArea.AddManipulator(new FavoriteElementDragManipulator(assetReference));
+                    Debug.Log("Adding manipulator(NEW): " + assetReference);
+                    dragArea.AddManipulator(new NewAssetsElementDragManipulator(assetReference));
                 }
-                
+
                 var icon = elementTree.Q<Image>("Icon");
                 if (icon != null)
                 {
                     icon.image = AssetPreview.GetMiniThumbnail(assetReference);
                 }
-                
+
                 var removeIcon = elementTree.Q<Image>("RemoveIcon");
                 if (removeIcon != null)
                 {
-                    // removeIcon.image = AssetPreview.GetMiniThumbnail(assetReference);
                     removeIcon.image = EditorGUIUtility.IconContent(UnityBuiltInIcons.removeIconName).image;
                     removeIcon.tooltip = "Remove";
-                    
-                    removeIcon.RegisterCallback(delegate(MouseUpEvent e)
+
+                    removeIcon.RegisterCallback<MouseUpEvent>(e =>
                     {
-                        FavoritesAsset.instance.RemoveFavorite(assetReference);
+                        _newAssets.RemoveFavorite(assetReference);
+                        ReloadRoot();
                     });
                 }
-                
+
                 var openPrefabIcon = elementTree.Q<Image>("OpenPrefabIcon");
                 if (openPrefabIcon != null)
                 {
-                    // removeIcon.image = AssetPreview.GetMiniThumbnail(assetReference);
                     openPrefabIcon.image = EditorGUIUtility.IconContent(UnityBuiltInIcons.openAssetIconName).image;
                     openPrefabIcon.tooltip = "Open";
 
                     openPrefabIcon.RemoveFromClassList("hidden");
 
-                    openPrefabIcon.RegisterCallback(delegate(MouseUpEvent e)
+                    openPrefabIcon.RegisterCallback<MouseUpEvent>(e =>
                     {
                         AssetDatabase.OpenAsset(assetReference);
                     });
                 }
-                
-                var label = elementTree.Q<Label>("Favorite");
+
+                var label = elementTree.Q<Label>("NewAsset");
                 if (label != null)
                 {
                     label.text = assetReference.name;
                 }
 
-                favoritesParent.Add(favoriteRoot);
+                newAssetsParent.Add(newAssetRoot);
             }
 
+            // Add a flexible space at the bottom to improve UI spacing
             var receiveDragArea = new VisualElement();
             receiveDragArea.style.flexGrow = 1;
             root.Add(receiveDragArea);
         }
     }
+
 }

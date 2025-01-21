@@ -5,7 +5,7 @@ using UnityEngine.UIElements;
 
 namespace Gemserk
 {
-    public class FavoriteElementDragManipulator : MouseManipulator
+    public class NewAssetsElementDragManipulator : MouseManipulator
     {
         private readonly EventCallback<MouseDownEvent> mouseDownHandler;
         private readonly EventCallback<MouseMoveEvent> mouseMoveHandler;
@@ -18,10 +18,10 @@ namespace Gemserk
 
         private readonly Object assetReference;
      
-        public FavoriteElementDragManipulator(Object assetReference)
+        public NewAssetsElementDragManipulator(Object assetReference)
         {
             this.assetReference = assetReference;
-            Debug.Log("FavoriteElementDragManipulator ref:" + assetReference.name);
+            Debug.Log("NewAssetsElementDragManipulator ref:" + assetReference.name);
             mouseDownHandler = OnMouseDown;
             mouseMoveHandler = OnMouseMove;
             mouseUpHandler = OnMouseUp;
