@@ -3,7 +3,9 @@
 [![openupm](https://img.shields.io/npm/v/com.gemserk.selectionhistory?label=openupm&registry_uri=https://package.openupm.com)](https://openupm.com/packages/com.gemserk.selectionhistory/)
 [![openupm](https://img.shields.io/badge/dynamic/json?color=brightgreen&label=downloads&query=%24.downloads&suffix=%2Fmonth&url=https%3A%2F%2Fpackage.openupm.com%2Fdownloads%2Fpoint%2Flast-month%2Fcom.gemserk.selectionhistory)](https://openupm.com/packages/com.gemserk.selectionhistory/)
 
-This plugin keeps a history of selected objects in Unity. It comes with a [window](#selection-history-window) to see the list of objects and interact with them with other behaviors like, for example, focus an previously selected object or even drag them to scene, project view, etc. 
+This plugin allows users to keep a history of selected objects in Unity. Moreover, users can manage your own categories for saving different objects dynamically. It comes with a [window](#selection-history-window) to see the list of objects and the users are able to interact with them with other behaviors like, for example, focus an previously selected object or even drag them to scene, project view, etc. 
+
+The project was originally made by [acoppes](https://github.com/acoppes/), I added the features for users to create their own categories and manage them efficiently. 
 
 <img src="screenshots/demo.gif" width="500" />
 <br/>
@@ -38,6 +40,8 @@ This plugin keeps a history of selected objects in Unity. It comes with a [windo
 * Open any asset with double click directly from the history window.
 * Quick menu options to customize behavior (show hierarchy objects or not).
 * Favorite items to [Favorites window](#favorites-window) (optional)
+* Create custom categories which can be used like Favorite items. (New)
+* Manage all the categories dynamically. (New)
 
 ### Install it from OpenUPM
 
